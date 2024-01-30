@@ -8,28 +8,31 @@ message Reponse {
 }
 
 message CounterReq {
-    string              method = 1;
-    string              code = 2;
-    string              host = 3;
-    int64               micro = 4;
-    map<string,string>  extra = 5;
+    string              svrname = 1;
+    string              method = 2;
+    string              code = 3;
+    string              host = 4;
+    int64               micro = 5;
+    map<string,string>  extra = 6;
 }
 
 message GaugeReq {
-    string              type = 1;
-    string              value = 2;
-    int64               add = 3;
-    bool                inc = 4;
-    int64               micro = 5;
-    string              host = 6;
-    map<string,string>  extra = 7;
+    string              svrname = 1;
+    string              type = 2;
+    string              value = 3;
+    int64               add = 4;
+    bool                inc = 5;
+    int64               micro = 6;
+    string              host = 7;
+    map<string,string>  extra = 8;
 }
 
 message SummaryReq {
-    string              method = 1;
-    int64               micro = 2;
-    string              host = 3;
-    map<string,string>  extra = 4;
+    string              svrname = 1;
+    string              method = 2;
+    int64               micro = 3;
+    string              host = 4;
+    map<string,string>  extra = 5;
 }
 
 service MetricsService {
