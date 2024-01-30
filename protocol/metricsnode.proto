@@ -2,16 +2,17 @@ syntax = "proto3";
 package protocol;
 
 message Reponse {
-    int32   Code                = 1;
-    string  msg                 = 2;
-    map<string,string> extra    = 3;
+    int32               Code = 1;
+    string              msg = 2;
+    map<string,string>  extra = 3;
 }
 
 message CounterReq {
     string              method = 1;
     string              code = 2;
     string              host = 3;
-    map<string,string>  extra = 4;
+    int64               micro = 4;
+    map<string,string>  extra = 5;
 }
 
 message GaugeReq {
@@ -19,18 +20,20 @@ message GaugeReq {
     string              value = 2;
     int64               add = 3;
     bool                inc = 4;
-    map<string,string>  extra = 5;
+    int64               micro = 5;
+    string              host = 6;
+    map<string,string>  extra = 7;
 }
 
 message SummaryReq {
     string              method = 1;
     int64               micro = 2;
-    int64               millo = 3;
+    string              host = 3;
     map<string,string>  extra = 4;
 }
 
 service MetricsService {
     rpc  Counter(CounterReq) returns (Reponse) {}
-    rpc  Gauge(GaugeReqReq) returns (Reponse) {}
+    rpc  Gauge(GaugeReq) returns (Reponse) {}
     rpc  Summary(SummaryReq) returns (Reponse) {}
 }
