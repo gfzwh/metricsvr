@@ -1,7 +1,7 @@
 package main
 
 import (
-	"metricsnode/controller"
+	"metricsvr/controller"
 	"os"
 	"os/signal"
 	"syscall"
