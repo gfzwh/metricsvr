@@ -14,7 +14,7 @@ import (
 func (this *controller) OnEvent(ctx context.Context, data []byte, ext *udp.EventInfo) (err error) {
 	code := "0"
 	defer func() {
-		Counter(config.Get("server", "name").String(""), "OnEvent", ext.Address, code)
+		Counter(config.Get("server", "name").String(""), "OnEvent", "", code)
 		if r := recover(); r != nil {
 			zzlog.Errorw("controller.OnEvent error", zap.Int("size", len(data)), zap.Error(r.(error)))
 		}
