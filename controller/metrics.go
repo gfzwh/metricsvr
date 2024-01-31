@@ -66,7 +66,7 @@ func (m *metrics) Mitem(svrname string) *mitem {
 					Name: "gfz_call",
 					Help: "How many RPC requests processed, partitioned by status code and RPC method.",
 				},
-				[]string{"code", "method"},
+				[]string{"code", "method", "host"},
 			),
 			// 用于统计用（链接、断开连接,panic,错误,...）
 			gfzVec: prometheus.NewGaugeVec(
@@ -81,6 +81,8 @@ func (m *metrics) Mitem(svrname string) *mitem {
 					"type",
 					// Of what type is the operation?
 					"value",
+
+					"host",
 				},
 			),
 			summaryVec: prometheus.NewSummaryVec(
@@ -89,7 +91,7 @@ func (m *metrics) Mitem(svrname string) *mitem {
 					Help:       "The temperature of the frog pond.",
 					Objectives: map[float64]float64{0.5: 0.05, 0.9: 0.01, 0.99: 0.001},
 				},
-				[]string{"method"},
+				[]string{"method", "host"},
 			),
 		}
 
@@ -123,18 +125,18 @@ func (m *metrics) Mitem(svrname string) *mitem {
 	return m.metric[svrname]
 }
 
-func GaugeInc(svrname, _type, value string) {
-	Metrics().Mitem(svrname).gfzVec.With(prometheus.Labels{"type": _type, "value": value}).Inc()
+func GaugeInc(svrname, _type, host, value string) {
+	Metrics().Mitem(svrname).gfzVec.With(prometheus.Labels{"type": _type, "value": value, "host": host}).Inc()
 }
 
-func Gauge(svrname, _type, value string, add int64) {
-	Metrics().Mitem(svrname).gfzVec.With(prometheus.Labels{"type": _type, "value": value}).Set(float64(add))
+func Gauge(svrname, _type, value, host string, add int64) {
+	Metrics().Mitem(svrname).gfzVec.With(prometheus.Labels{"type": _type, "value": value, "host": host}).Set(float64(add))
 }
 
-func Counter(svrname, method, code string) {
-	Metrics().Mitem(svrname).counterVec.WithLabelValues(code, method).Inc()
+func Counter(svrname, method, host, code string) {
+	Metrics().Mitem(svrname).counterVec.WithLabelValues(code, method, host).Inc()
 }
 
-func Summary(svrname, method string, micro int64) {
-	Metrics().Mitem(svrname).summaryVec.WithLabelValues(method).Observe(float64(micro))
+func Summary(svrname, method, host string, micro int64) {
+	Metrics().Mitem(svrname).summaryVec.WithLabelValues(method, host).Observe(float64(micro))
 }
