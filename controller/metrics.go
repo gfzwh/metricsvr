@@ -66,7 +66,7 @@ func (m *metrics) Mitem(svrname string) *mitem {
 					Name: "gfz_call",
 					Help: "How many RPC requests processed, partitioned by status code and RPC method.",
 				},
-				[]string{"code", "method", "host"},
+				[]string{"code", "method", "host", "port"},
 			),
 			// 用于统计用（链接、断开连接,panic,错误,...）
 			gfzVec: prometheus.NewGaugeVec(
@@ -83,6 +83,7 @@ func (m *metrics) Mitem(svrname string) *mitem {
 					"value",
 
 					"host",
+					"port",
 				},
 			),
 			summaryVec: prometheus.NewSummaryVec(
@@ -91,7 +92,7 @@ func (m *metrics) Mitem(svrname string) *mitem {
 					Help:       "The temperature of the frog pond.",
 					Objectives: map[float64]float64{0.5: 0.05, 0.9: 0.01, 0.99: 0.001},
 				},
-				[]string{"method", "host"},
+				[]string{"method", "host", "port"},
 			),
 		}
 
@@ -125,18 +126,18 @@ func (m *metrics) Mitem(svrname string) *mitem {
 	return m.metric[svrname]
 }
 
-func GaugeInc(svrname, _type, host, value string) {
-	Metrics().Mitem(svrname).gfzVec.With(prometheus.Labels{"type": _type, "value": value, "host": host}).Inc()
+func GaugeInc(svrname, _type, host, port, value string) {
+	Metrics().Mitem(svrname).gfzVec.With(prometheus.Labels{"type": _type, "value": value, "host": host, "port": port}).Inc()
 }
 
-func Gauge(svrname, _type, value, host string, add int64) {
-	Metrics().Mitem(svrname).gfzVec.With(prometheus.Labels{"type": _type, "value": value, "host": host}).Set(float64(add))
+func Gauge(svrname, _type, value, host, port string, add int64) {
+	Metrics().Mitem(svrname).gfzVec.With(prometheus.Labels{"type": _type, "value": value, "host": host, "port": port}).Set(float64(add))
 }
 
-func Counter(svrname, method, host, code string) {
-	Metrics().Mitem(svrname).counterVec.WithLabelValues(code, method, host).Inc()
+func Counter(svrname, method, host, port, code string) {
+	Metrics().Mitem(svrname).counterVec.WithLabelValues(code, method, host, port).Inc()
 }
 
-func Summary(svrname, method, host string, micro int64) {
-	Metrics().Mitem(svrname).summaryVec.WithLabelValues(method, host).Observe(float64(micro))
+func Summary(svrname, method, host, port string, micro int64) {
+	Metrics().Mitem(svrname).summaryVec.WithLabelValues(method, host, port).Observe(float64(micro))
 }
