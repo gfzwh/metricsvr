@@ -25,12 +25,14 @@ func (this *controller) ipport(host string) (ip, port string) {
 	return
 }
 
-func (this *controller) OnEvent(ctx context.Context, data []byte, ext *udp.EventInfo) (err error) {
+func (this *controller) OnEvent(ctx context.Context, req *udp.Request, res *udp.Response) (err error) {
 	code := "0"
+	data := req.Body()
 	defer func() {
 		Counter(config.Get("server", "name").String(""), "OnEvent", "", "", code)
 		if r := recover(); r != nil {
-			zzlog.Errorw("controller.OnEvent error", zap.Int("size", len(data)), zap.Error(r.(error)))
+			zzlog.Errorw("controller.OnEvent error", zap.Int("size", len(data)),
+				zap.Any("addr", req.Addr()), zap.Error(r.(error)))
 		}
 	}()
 	var metric proto.Metrics
@@ -41,8 +43,6 @@ func (this *controller) OnEvent(ctx context.Context, data []byte, ext *udp.Event
 
 		return
 	}
-
-	zzlog.Debugw("udp.OnEvent call ", zap.Any("svrname", metric.Svrname), zap.Any("host", metric.Host), zap.Any("size", len(data)))
 
 	ip, port := this.ipport(metric.Host)
 	switch metric.Type {
@@ -67,5 +67,8 @@ func (this *controller) OnEvent(ctx context.Context, data []byte, ext *udp.Event
 
 		break
 	}
+
+	zzlog.Debugw("udp.OnEvent call ", zap.Any("addr", req.Addr()),
+		zap.Any("svrname", metric.Svrname), zap.Any("host", metric.Host), zap.Any("size", len(data)))
 	return
 }
