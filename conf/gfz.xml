@@ -3,13 +3,15 @@
     <!-- 日志配置 -->
     <log>
         <!-- debug,info,warn,error,dpanic,panic,fatal -->
-        <level>info</level>
+        <level>debug</level>
         <!-- 存储路径，如果没有配置，则只是输出到控制台 -->
         <log_file>./logs/log-service.log</log_file>
     </log>
     <!-- metrics配置 -->
     <metrics>
-        <push>http://127.0.0.1:9091</push>
+        <topic>metrics_basesvr</topic>
+        <group></group>
+        <brokers>127.0.0.1:9092,127.0.0.1:9092</brokers>
     </metrics>
     <!-- 服务管理配置 -->
     <polaris>

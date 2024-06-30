@@ -6,15 +6,13 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/gfzwh/gfz/udp"
+	"github.com/gfzwh/gfz/config"
 )
 
 func main() {
-	svr := udp.NewServer("./conf/gfz.xml")
-	defer svr.Release()
-
+	config.Init("./conf/gfz.xml")
 	ctl := controller.Controller()
-	svr.Run(udp.Event(ctl.OnEvent))
+	go ctl.Run()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)

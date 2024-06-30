@@ -1,14 +1,11 @@
 package controller
 
 import (
-	"context"
 	"strings"
 
 	"go.uber.org/zap"
 
-	"github.com/gfzwh/gfz/config"
 	"github.com/gfzwh/gfz/proto"
-	"github.com/gfzwh/gfz/udp"
 	"github.com/gfzwh/gfz/zzlog"
 )
 
@@ -25,21 +22,32 @@ func (this *controller) ipport(host string) (ip, port string) {
 	return
 }
 
-func (this *controller) OnEvent(ctx context.Context, req *udp.Request, res *udp.Response) (err error) {
-	code := "0"
-	data := req.Body()
+type IConsumer interface {
+	Error(error)
+	Notify(interface{})
+	Message([]byte)
+}
+
+func (this *controller) Error(err error) {
+	zzlog.Errorw("kafka error", zap.Error(err))
+}
+
+func (this *controller) Notify(notify interface{}) {
+
+}
+
+func (this *controller) Message(partition int32, offset int64, message []byte) {
+	data := message
 	defer func() {
-		Counter(config.Get("server", "name").String(""), "OnEvent", "", "", code)
 		if r := recover(); r != nil {
-			zzlog.Errorw("controller.OnEvent error", zap.Int("size", len(data)),
-				zap.Any("addr", req.Addr()), zap.Error(r.(error)))
+			zzlog.Errorw("controller.Message error", zap.Int("size", len(data)),
+				zap.Error(r.(error)))
 		}
 	}()
 	var metric proto.Metrics
-	err = metric.Unmarshal(data)
+	err := metric.Unmarshal(data)
 	if nil != err {
-		code = "500"
-		zzlog.Errorw("OnEvent Unmarshal error", zap.Any("size", len(data)), zap.Error(err))
+		zzlog.Errorw("controller.Message Unmarshal error", zap.Any("size", len(data)), zap.Error(err))
 
 		return
 	}
@@ -68,7 +76,7 @@ func (this *controller) OnEvent(ctx context.Context, req *udp.Request, res *udp.
 		break
 	}
 
-	zzlog.Debugw("udp.OnEvent call ", zap.Any("addr", req.Addr()),
-		zap.Any("svrname", metric.Svrname), zap.Any("host", metric.Host), zap.Any("size", len(data)))
+	zzlog.Debugw("controller.Message call ", zap.Any("svrname", metric.Svrname),
+		zap.Any("host", metric.Host), zap.Any("size", len(data)))
 	return
 }
