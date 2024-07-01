@@ -102,7 +102,7 @@ func (m *metrics) Mitem(svrname string) *mitem {
 
 		go func() {
 			for {
-				if err := push.New(config.Get("metrics", "push").String(""), svrname).
+				if err := push.New(config.Get("prometheus", "push").String(""), svrname).
 					Collector(instance.counterVec).
 					Collector(instance.gfzVec).
 					Collector(instance.summaryVec).

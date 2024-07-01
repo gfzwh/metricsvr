@@ -52,31 +52,34 @@ func (this *controller) Message(partition int32, offset int64, message []byte) {
 		return
 	}
 
-	ip, port := this.ipport(metric.Host)
-	switch metric.Type {
-	case proto.MetricType_CounterType:
-		Counter(metric.Svrname, metric.Counter.Method, ip, port, metric.Counter.Code)
-		Counter(metric.Svrname, metric.Counter.Method, "all", "", metric.Counter.Code)
+	for _, it := range metric.Lists {
+		ip, port := this.ipport(it.Host)
+		switch it.Type {
+		case proto.MetricType_CounterType:
+			Counter(it.Svrname, it.Counter.Method, ip, port, it.Counter.Code)
+			Counter(it.Svrname, it.Counter.Method, "all", "", it.Counter.Code)
 
-		break
-	case proto.MetricType_GaugeType:
-		if metric.Gauge.Inc {
-			GaugeInc(metric.Svrname, metric.Gauge.Type, ip, port, metric.Gauge.Value)
-			GaugeInc(metric.Svrname, metric.Gauge.Type, "all", "", metric.Gauge.Value)
-		} else {
-			Gauge(metric.Svrname, metric.Gauge.Type, metric.Gauge.Value, ip, port, metric.Gauge.Add)
-			Gauge(metric.Svrname, metric.Gauge.Type, metric.Gauge.Value, "all", "", metric.Gauge.Add)
+			break
+		case proto.MetricType_GaugeType:
+			if it.Gauge.Inc {
+				GaugeInc(it.Svrname, it.Gauge.Type, ip, port, it.Gauge.Value)
+				GaugeInc(it.Svrname, it.Gauge.Type, "all", "", it.Gauge.Value)
+			} else {
+				Gauge(it.Svrname, it.Gauge.Type, it.Gauge.Value, ip, port, it.Gauge.Add)
+				Gauge(it.Svrname, it.Gauge.Type, it.Gauge.Value, "all", "", it.Gauge.Add)
+			}
+
+			break
+		case proto.MetricType_SummaryType:
+			Summary(it.Svrname, it.Summary.Method, ip, port, it.Micro)
+			Summary(it.Svrname, it.Summary.Method, "all", "", it.Micro)
+
+			break
 		}
 
-		break
-	case proto.MetricType_SummaryType:
-		Summary(metric.Svrname, metric.Summary.Method, ip, port, metric.Micro)
-		Summary(metric.Svrname, metric.Summary.Method, "all", "", metric.Micro)
-
-		break
+		zzlog.Debugw("controller.Message call ", zap.Any("svrname", it.Svrname),
+			zap.Any("host", it.Host), zap.Any("size", len(data)))
 	}
 
-	zzlog.Debugw("controller.Message call ", zap.Any("svrname", metric.Svrname),
-		zap.Any("host", metric.Host), zap.Any("size", len(data)))
 	return
 }

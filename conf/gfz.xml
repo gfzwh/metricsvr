@@ -13,34 +13,7 @@
         <group></group>
         <brokers>127.0.0.1:9092,127.0.0.1:9092</brokers>
     </metrics>
-    <!-- 服务管理配置 -->
-    <polaris>
-        <addrs>127.0.0.1:8091,127.0.0.1:8091</addrs>
-        <reporter>
-            <enable>1</enable>
-            <prometheus>
-                <type>push</type>
-                <address>127.0.0.1:9091</address>
-                <!-- s -->
-                <interval>10</interval>
-            </prometheus>
-        </reporter>
-    </polaris>
-
-    <!-- 用于注册指定注册到哪里 -->
-    <!-- 用于标识是谁在注册服务，同时也说明是谁提供的服务 -->
-    <server>
-        <!-- polaris发现服务配置 -->
-        <!-- 这个是当用于需要使用服务时，client通过这个获取节点信息 -->
-        <group>basesvr</group>
-        <name>metricsvr</name>
-        <version>v0.0.1</version>
-        <token>08f31c0181f43768a92c3fc19da5c72d08f31c0181f43768a92c3fc19da5c72d</token>
-        <!-- 位置信息 -->
-        <location>
-            <region>South China</region>
-            <zone>Guangzhou</zone>
-            <campus>Knowledge City</campus>
-        </location>
-    </server>
+    <prometheus>
+        <push>http://127.0.0.1:9091</push>
+    </prometheus>
 </gfz>

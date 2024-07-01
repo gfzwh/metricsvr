@@ -7,10 +7,15 @@ import (
 	"syscall"
 
 	"github.com/gfzwh/gfz/config"
+	"github.com/gfzwh/gfz/zzlog"
 )
 
 func main() {
 	config.Init("./conf/gfz.xml")
+	zzlog.Init(
+		zzlog.WithLogName(config.Get("log", "log_file").String("")),
+		zzlog.WithLevel(config.Get("log", "level").String("info")))
+
 	ctl := controller.Controller()
 	go ctl.Run()
 
