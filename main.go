@@ -17,6 +17,8 @@ func main() {
 		zzlog.WithLevel(config.Get("log", "level").String("info")))
 
 	ctl := controller.Controller()
+	defer ctl.Release()
+
 	go ctl.Run()
 
 	quit := make(chan os.Signal, 1)

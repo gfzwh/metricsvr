@@ -24,6 +24,10 @@ func Controller() *controller {
 	return newController()
 }
 
+func (this *controller) Release() {
+	this.sub.Release()
+}
+
 func (this *controller) Run() {
 	this.sub.Consume(this)
 }
