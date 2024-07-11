@@ -1,2 +1,2 @@
 # metricsvr
-上报监控的服务节点，主要用于统一上报监控
+Subscribe to monitoring information and upload the monitoring information to promethums.

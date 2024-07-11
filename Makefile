@@ -9,11 +9,11 @@ build:
 	go get
 	go build  -o metricsvr main.go
 
-	# mkdir bin
-	# cp -rf conf bin/
-	# cp -rf metricsvr bin/
-	# cp stop.sh bin/
-	# cp start.sh bin/
+	mkdir bin
+	cp -rf conf bin/
+	cp -rf metricsvr bin/
+	cp stop.sh bin/
+	cp start.sh bin/
 
 install:
 	cp -rf bin/* ../bin/metricsvr/

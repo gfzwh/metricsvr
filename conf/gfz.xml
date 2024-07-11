@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gfz>
-    <!-- 日志配置 -->
     <log>
         <!-- debug,info,warn,error,dpanic,panic,fatal -->
         <level>debug</level>
-        <!-- 存储路径，如果没有配置，则只是输出到控制台 -->
         <log_file>./logs/log-service.log</log_file>
     </log>
-    <!-- metrics配置 -->
     <metrics>
         <topic>metrics_basesvr</topic>
         <group></group>
