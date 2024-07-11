@@ -1,2 +1,2 @@
 # metricsvr
-Subscribe to monitoring information and upload the monitoring information to promethums.
+Subscribe to monitoring information from the [gffg](https://github.com/gfzwh/gffg) framework service and report the monitoring information to promethums.
