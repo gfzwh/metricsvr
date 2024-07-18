@@ -1,8 +1,10 @@
 package controller
 
 import (
-	"github.com/gfzwh/gfz/config"
-	"github.com/gfzwh/gfz/kafka"
+	"fmt"
+
+	"github.com/shockerjue/gffg/config"
+	"github.com/shockerjue/gffg/kafka"
 )
 
 type controller struct {
@@ -10,6 +12,7 @@ type controller struct {
 }
 
 func newController() *controller {
+	fmt.Println(config.Get("metrics", "brokers").String(""))
 	v := &controller{
 		sub: kafka.NewConsumer(
 			kafka.Brokers(config.Get("metrics", "brokers").String("")),

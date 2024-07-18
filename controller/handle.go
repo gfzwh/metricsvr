@@ -5,8 +5,8 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/gfzwh/gfz/proto"
-	"github.com/gfzwh/gfz/zzlog"
+	"github.com/shockerjue/gffg/proto"
+	"github.com/shockerjue/gffg/zzlog"
 )
 
 func (this *controller) ipport(host string) (ip, port string) {

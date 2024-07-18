@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gfz>
+<gffg>
     <log>
         <!-- debug,info,warn,error,dpanic,panic,fatal -->
         <level>debug</level>
@@ -13,4 +13,4 @@
     <prometheus>
         <push>http://127.0.0.1:9091</push>
     </prometheus>
-</gfz>
+</gffg>

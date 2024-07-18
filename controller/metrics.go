@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gfzwh/gfz/config"
-	"github.com/gfzwh/gfz/zzlog"
+	"github.com/shockerjue/gffg/config"
+	"github.com/shockerjue/gffg/zzlog"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/push"
